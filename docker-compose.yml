@@ -1,0 +1,39 @@
+version: "3.0"
+
+services:
+  node:
+    image: creadflow-assignment
+    build:
+      context: "."
+    ports:
+      - "5000:5000"
+      - "3000:3000"
+    command: ["npm", "run", "dev"]
+    volumes:
+      - ./:/usr/src/app
+      # - ./.node_env:/usr/src/app/.env
+    links:
+      - redis
+      - postgresql
+
+  postgresql:
+    image: postgres
+    volumes:
+      - postgres:/var/lib/postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: credflow
+      POSTGRES_PASSWORD: ABCDEabcde!123
+      POSTGRES_DB: credflow
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+
+## By default this config uses default local driver,
+## For custom volumes replace with volume driver configuration.
+volumes:
+  redis:
+  postgres:
